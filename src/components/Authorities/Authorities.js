@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const styles = theme => ({
     root: {
@@ -21,6 +22,9 @@ export const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  progress: {
+    margin: theme.spacing(2),
+  },
 })
 
 export class Authorities extends Component {
@@ -28,7 +32,8 @@ export class Authorities extends Component {
         super(props)
      this.state= {
          authorites:[] ,
-         selectedLocalAuthorityId:-1  
+         selectedLocalAuthorityId:-1  ,
+         isloading:true
          }
          this.handleChange = this.handleChange.bind(this)
     }
@@ -36,7 +41,7 @@ export class Authorities extends Component {
     async componentDidMount() {
         console.log('calling');
         const a=await service.getAuthorities();
-        this.setState({ authorites: a })
+        this.setState({ authorites: a , isloading:false})
     }
 
     handleChange(e) {
@@ -52,7 +57,10 @@ export class Authorities extends Component {
       classes      
     } = this.props
         return (
-            <div>            
+            <div>        
+            { this.state.isloading && <CircularProgress className={classes.progress} />    }
+            {
+                !this.state.isloading &&
             <FormControl className={classes.formControl}>
         <InputLabel htmlFor="auth">Authority</InputLabel>
         <Select
@@ -66,7 +74,8 @@ export class Authorities extends Component {
                 }
           
         </Select>
-      </FormControl>    
+      </FormControl>   
+            } 
             <Ratings authorityId={this.state.selectedLocalAuthorityId}></Ratings>     
             </div>
         )

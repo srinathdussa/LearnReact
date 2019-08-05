@@ -10,6 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export const styles = theme => ({
      root: {
@@ -22,7 +23,10 @@ export const styles = theme => ({
   },
   center:{
       align:'center'
-  }
+  }  ,
+  progress: {
+    margin: theme.spacing(2),
+  },
 })
 
 
@@ -31,17 +35,24 @@ export class Ratings extends Component {
         super(props)
      this.state= {
          selectedAuthorityId:-1,
-         ratings:{}
+         ratings:{},
+         isloading:false
          }
     }
     async componentDidMount() {
+        if(this.props.authorityId>-1)
        await this.getRatings(this.props.authorityId);        
     }
 
     async getRatings(authorityId){
+        this.setState({ 
+        isloading:true
+         })
+
         const a=await service.getRatings(authorityId);
         this.setState({ ratings: a,
-        selectedAuthorityId:authorityId
+        selectedAuthorityId:authorityId,
+        isloading:false
          })
     }
 
@@ -59,6 +70,9 @@ async componentDidUpdate(prevProps) {
         return (
            <div>                      
 <div className={classes.center}>
+{ this.state.isloading && <CircularProgress className={classes.progress} />    }
+
+{!this.state.isloading && Object.keys(this.state.ratings).length>0 &&
 <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
@@ -81,6 +95,8 @@ async componentDidUpdate(prevProps) {
         </TableBody>
       </Table>
     </Paper>
+}
+
 </div>
            </div>      
         )
