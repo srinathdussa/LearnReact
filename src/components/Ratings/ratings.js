@@ -17,12 +17,13 @@ export const styles = theme => ({
     width: '50%',
     marginTop: theme.spacing(3),
     overflowX: 'auto',    
+    display:'inline-block'
   },
   table: {
     minWidth: 400,
   },
   center:{
-      align:'center'
+      
   }  ,
   progress: {
     margin: theme.spacing(2),
@@ -39,9 +40,8 @@ export class Ratings extends Component {
          isloading:false
          }
     }
-    async componentDidMount() {
-        if(this.props.authorityId>-1)
-       await this.getRatings(this.props.authorityId);        
+    componentDidMount() {        
+       this.getRatings(this.props.authorityId);        
     }
 
     async getRatings(authorityId){
@@ -56,10 +56,10 @@ export class Ratings extends Component {
          })
     }
 
-async componentDidUpdate(prevProps) {
+ componentDidUpdate(prevProps) {
      if (prevProps.authorityId !== this.props.authorityId) {
        console.log(this.props.authorityId);       
-       await this.getRatings(this.props.authorityId);
+       this.getRatings(this.props.authorityId);
      }
    }
 

@@ -76,7 +76,9 @@ export class Authorities extends Component {
         </Select>
       </FormControl>   
             } 
+            { this.state.selectedLocalAuthorityId>-1 &&
             <Ratings authorityId={this.state.selectedLocalAuthorityId}></Ratings>     
+            }
             </div>
         )
     }
